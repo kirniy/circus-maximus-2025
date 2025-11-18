@@ -527,7 +527,12 @@
         function callPhone() {
             haptic('heavy');
             rainEmojis(['📞']);
-            window.location.href = 'tel:89214104440';
+            const phone = 'tel:+79214104440';
+            if (tg && tg.openLink) {
+                tg.openLink(phone);
+            } else {
+                window.location.href = phone;
+            }
         }
 
         // --- 2. PRELOADER ---
