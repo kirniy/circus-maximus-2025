@@ -28,7 +28,7 @@
             cursor: pointer;
         }
 
-        /* 1. BACKGROUND - CRISP RED & WHITE */
+        /* 1. BACKGROUND */
         .circus-bg {
             position: fixed;
             top: -100%;
@@ -42,14 +42,12 @@
             );
             animation: rotate-bg 80s linear infinite;
             z-index: -2;
-            /* No blur, keeping it crisp as requested */
         }
         
-        /* Slight overlay for readability, but NOT blurred */
         .overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4); 
+            background: rgba(0, 0, 0, 0.6); 
             z-index: -1;
             pointer-events: none;
         }
@@ -74,7 +72,7 @@
             100% { opacity: 1; transform: skew(0deg); }
         }
 
-        /* 3. UI ELEMENTS - NO YELLOW */
+        /* 3. UI ELEMENTS */
         .glass-panel {
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(20px);
@@ -123,13 +121,12 @@
             pointer-events: all;
         }
 
-        /* 5. REAL CURTAINS (RED VELVET) */
+        /* 5. LOADER - REAL CURTAINS */
         #curtain-left, #curtain-right {
             position: fixed;
             top: 0;
             width: 50%;
             height: 100%;
-            /* Rich Red Velvet */
             background: repeating-linear-gradient(90deg, #8a0000, #8a0000 10px, #5c0000 10px, #5c0000 20px);
             z-index: 100;
             transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
@@ -141,7 +138,6 @@
         #curtain-left { left: 0; transform-origin: left; border-right: 2px solid #4a0000; }
         #curtain-right { right: 0; transform-origin: right; border-left: 2px solid #4a0000; }
         
-        /* Logo Container in Loader */
         .loader-logo-container {
             width: 140px;
             height: 140px;
@@ -163,16 +159,30 @@
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Marquee */
-        .marquee-container {
+        /* 6. TICKER FIXED */
+        .marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
             background: #000;
             border-bottom: 1px solid #fff;
             padding: 8px 0;
-            overflow: hidden;
             white-space: nowrap;
+            position: relative;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            color: #fff;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
         
-        /* Animations */
+        /* 7. BALLOONS & RAIN */
         .emoji-rain {
             position: fixed;
             top: -50px;
@@ -184,26 +194,72 @@
         }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        /* CARD DESIGN IMPROVED */
-        .fate-card {
-            background: #fff;
-            border: 4px solid #D40000;
-            border-radius: 16px;
+        .balloon {
+            position: fixed;
+            bottom: -100px;
+            font-size: 40px;
+            opacity: 0.8;
+            z-index: -1;
+            animation: floatUp 15s linear infinite;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-120vh) rotate(20deg); }
+        }
+
+        /* 8. NEAT FATE CARD (COMPACT & STYLISH) */
+        .tarot-container {
+            perspective: 1000px;
+            width: 180px;
+            height: 260px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        .tarot-inner {
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 0 #8a0000;
-            transition: transform 0.1s;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
         }
-        .fate-card::before {
-            content: '';
+        .tarot-container.flipped .tarot-inner {
+            transform: rotateY(180deg);
+        }
+        .tarot-front, .tarot-back {
             position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #fff0f0 10px, #fff0f0 20px);
-            z-index: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            border: 4px solid #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .fate-card:active {
-            transform: translateY(4px);
-            box-shadow: 0 6px 0 #8a0000;
+        .tarot-front {
+            background: #1a0000;
+            background-image: radial-gradient(#3f0000 15%, transparent 16%), radial-gradient(#3f0000 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+        .tarot-back {
+            background: #fff;
+            color: #000;
+            transform: rotateY(180deg);
+            padding: 10px;
+            border-color: #D40000;
+        }
+        .tarot-pattern {
+            border: 2px solid #D40000;
+            width: 90%; height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
     </style>
 </head>
@@ -213,7 +269,6 @@
     <div id="loader" class="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center">
         <div id="curtain-left"></div>
         <div id="curtain-right"></div>
-        <!-- LOGO ONLY -->
         <div id="loader-text" class="absolute z-[101] transition-opacity duration-500">
             <div class="loader-logo-container">
                 <img src="vnvnc-logo-classic-border.svg" class="w-28 h-28 drop-shadow-2xl" alt="VNVNC">
@@ -221,29 +276,31 @@
         </div>
     </div>
 
-    <!-- 1. BACKGROUNDS -->
+    <!-- 1. BACKGROUNDS & DECOR -->
     <div class="circus-bg"></div>
     <div class="overlay"></div>
+    
+    <!-- Floating Balloons -->
+    <div class="balloon" style="left: 10%; animation-duration: 12s; animation-delay: 0s;" onclick="rainEmojis(['🎈'])">🎈</div>
+    <div class="balloon" style="left: 85%; animation-duration: 18s; animation-delay: 5s;" onclick="rainEmojis(['🎈'])">🎈</div>
+    <div class="balloon" style="left: 50%; animation-duration: 25s; animation-delay: 2s; font-size: 20px; opacity: 0.5;" onclick="rainEmojis(['🎈'])">🎈</div>
 
     <!-- 2. HEADER -->
     <header class="relative z-10 text-center" onclick="rainEmojis(['🎪','🎈','🤡'])">
-        <!-- Ticker -->
-        <div class="marquee-wrapper bg-black border-b border-white/20 py-2 overflow-hidden">
-            <div class="inline-block whitespace-nowrap animate-[marquee_20s_linear_infinite] text-[10px] font-black text-white tracking-[0.3em]">
+        <!-- Ticker Fixed -->
+        <div class="marquee-wrapper">
+            <div class="marquee-content">
                 🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
                 🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
             </div>
         </div>
 
         <div class="px-4 pt-6 relative flex flex-col items-center justify-center">
-            <div class="absolute top-6 left-4 text-3xl animate-bounce cursor-pointer hover:scale-125 transition" onclick="rainEmojis(['🎈'])">🎈</div>
-            <div class="absolute top-10 right-6 text-3xl animate-bounce cursor-pointer hover:scale-125 transition" style="animation-delay: 0.5s" onclick="rainEmojis(['🎩'])">🎩</div>
-
             <h1 class="text-6xl font-ruslan text-white uppercase leading-[0.85] neon-glitch drop-shadow-2xl">
                 Circus<br><span class="text-[#D40000] drop-shadow-[0_0_15px_rgba(212,0,0,0.8)]">Maximus</span>
             </h1>
             
-            <div class="mt-5 flex justify-center items-center gap-3">
+            <div class="mt-5 flex justify-center items-center gap-3" onclick="rainEmojis(['🎪'])">
                 <div class="h-[1px] w-10 bg-white"></div>
                 <span class="text-xs font-black tracking-[0.4em] text-white uppercase border border-white px-3 py-1 rounded-full">Episode 2</span>
                 <div class="h-[1px] w-10 bg-white"></div>
@@ -253,54 +310,60 @@
 
     <main class="relative z-10 flex-grow flex flex-col gap-10 mt-8">
 
-        <!-- 3. FATE GAME (BETTER DESIGN) -->
-        <section class="px-4">
-            <div class="glass-panel p-6 text-center relative overflow-visible">
-                <h3 class="text-[10px] font-black text-white/50 uppercase tracking-[0.3em] mb-4">🃏 Узнай свою судьбу</h3>
-                
-                <button onclick="playJokerGame(event)" class="fate-card w-full py-6 flex flex-col items-center justify-center gap-2 group">
-                    <div class="relative z-10 flex flex-col items-center">
-                        <span class="text-4xl mb-2 group-active:scale-110 transition-transform">🃏</span>
-                        <span id="joker-result" class="font-ruslan text-2xl text-black uppercase tracking-wide">Вытянуть Карту</span>
-                    </div>
-                </button>
+        <!-- 3. FATE GAME (NEAT & COMPACT) -->
+        <section class="px-4 flex flex-col items-center">
+            <div class="text-center mb-4">
+                <h3 class="text-[10px] font-black text-white/70 uppercase tracking-[0.3em]">🃏 Узнай свою роль</h3>
             </div>
+            
+            <div class="tarot-container" id="tarot-card" onclick="playJokerGame(event)">
+                <div class="tarot-inner">
+                    <div class="tarot-front">
+                        <div class="text-5xl opacity-80">?</div>
+                        <div class="text-xs font-ruslan mt-2 tracking-widest text-white/50">FATE</div>
+                    </div>
+                    <div class="tarot-back">
+                        <div class="tarot-pattern">
+                            <div class="text-4xl mb-2">🤡</div>
+                            <div id="joker-role" class="font-ruslan text-xl text-[#D40000] uppercase leading-none">Клоун</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="spin-btn" onclick="playJokerGame(event)" class="mt-6 bg-white text-black font-bold py-2 px-8 rounded-full text-xs uppercase tracking-widest hover:bg-gray-200 transition active:scale-95">
+                Вытянуть карту
+            </button>
         </section>
 
-        <!-- 4. VIDEO CAROUSEL (NO PLAY BUTTONS) -->
+        <!-- 4. VIDEO CAROUSEL -->
         <section>
             <div class="flex overflow-x-auto snap-x snap-mandatory px-4 gap-5 no-scrollbar pb-6">
-                
                 <!-- CARD 1 -->
                 <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
                      onclick="openFullscreenVideo('21-11.mp4', 'https://vnvnc.ru/e/21-11-25-2300', '21.11 | Friday')">
                     <video src="21-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    
                     <div class="absolute bottom-0 left-0 w-full p-6">
                         <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">21.11</h2>
                         <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Пятница</p>
                     </div>
                 </div>
-
                 <!-- CARD 2 -->
                 <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
                      onclick="openFullscreenVideo('22-11.mp4', 'https://vnvnc.ru/e/22-11-25', '22.11 | Saturday')">
                     <video src="22-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    
                     <div class="absolute bottom-0 left-0 w-full p-6">
                         <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">22.11</h2>
                         <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Суббота</p>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <!-- 5. EVENT DETAILS -->
         <section class="px-4 text-sm text-white leading-relaxed space-y-8">
-            
             <div class="text-center space-y-3" onclick="rainEmojis(['🍿'])">
                  <p class="text-3xl font-bold text-white font-ruslan tracking-wider drop-shadow-md">SHOWTIME</p>
                  <div class="w-12 h-1 bg-white mx-auto rounded-full"></div>
@@ -309,14 +372,11 @@
 
             <div class="glass-panel p-8 space-y-6 relative border-t-4 border-t-white" onclick="rainEmojis(['🦁','🎭'])">
                 <div class="absolute -top-5 -left-2 text-4xl rotate-[-10deg] drop-shadow-md">🎟️</div>
-                
                 <p class="text-center font-medium text-sm leading-relaxed">
                     🤹‍♀️ Готовьтесь к возвращению волшебства - в VNVNC снова гастролирует аутентичный цирк!
                     <br><br>
                     21 и 22 ноября в нашем шатре музыка, яркие костюмы и тематические декорации сделают тебя частью грандиозного шоу. Танцпол станет ареной, гости - артистами! 🎩
                 </p>
-                
-                <!-- Stylish List -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
                         <span class="text-2xl">🤩</span>
@@ -331,7 +391,6 @@
                         <span class="font-bold text-xs">Цирковые персонажи и безумие</span>
                     </div>
                 </div>
-                
                 <div class="text-center text-[10px] uppercase tracking-widest opacity-80 pt-2 font-bold">
                     Dress Code: Red & White Circles / Circus Attire
                 </div>
@@ -354,7 +413,7 @@
                 ⚠️ НЕ ЗАБУДЬ ОРИГИНАЛЫ ДОКУМЕНТОВ (18+)
             </div>
 
-            <!-- Buttons High Taste -->
+            <!-- Buttons -->
             <div class="space-y-4 pt-4">
                 <a href="https://vnvnc.ru/e/21-11-25-2300" onclick="haptic('light')" class="ticket-btn block w-full py-5 text-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-xl">
                     TICKETS 21.11
@@ -375,9 +434,8 @@
             </div>
         </section>
 
-        <!-- 6. SOCIAL FOOTER (POLISHED) -->
+        <!-- 6. SOCIAL FOOTER -->
         <footer class="mt-6 px-4 pb-12">
-            <!-- 4 Buttons Grid -->
             <div class="grid grid-cols-4 gap-3 mb-10">
                 <a href="https://t.me/vnvnc_spb" onclick="haptic('light')" class="bg-white/10 border border-white/20 flex flex-col items-center justify-center py-3 rounded-xl active:bg-white/20 transition">
                     <svg class="w-5 h-5 text-white fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.696.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.751-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.119.098.152.228.166.319.016.101.016.205.01.318z"/></svg>
@@ -408,17 +466,12 @@
 
     <!-- 7. FULLSCREEN VIDEO MODAL -->
     <div id="video-modal" class="fixed inset-0 z-50 flex flex-col bg-black">
-        <!-- Close Button -->
         <button onclick="closeVideo()" class="absolute top-4 right-4 z-20 bg-black/50 rounded-full p-2 text-white border border-white/20">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-
-        <!-- Video Player -->
         <div class="flex-1 relative flex items-center justify-center bg-black">
             <video id="modal-video" class="w-full h-full object-contain" loop playsinline></video>
         </div>
-
-        <!-- Action Bar in Modal -->
         <div class="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black via-black/90 to-transparent">
             <h3 id="modal-title" class="text-2xl font-ruslan text-white mb-4 text-center drop-shadow-md">DATE</h3>
             <a id="modal-btn" href="#" onclick="haptic('medium')" class="ticket-btn block w-full py-4 text-center text-lg">
@@ -428,7 +481,7 @@
     </div>
 
     <script>
-        // --- 1. TELEGRAM INITIALIZATION ---
+        // --- 1. TELEGRAM ---
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.enableClosingConfirmation();
@@ -452,7 +505,7 @@
             }, 1200);
         });
 
-        // --- 3. RAIN ANIMATION ---
+        // --- 3. RAIN & BALLOONS ---
         function rainEmojis(emojiList) {
             haptic('light');
             const count = 8; 
@@ -469,47 +522,66 @@
             }
         }
 
-        // --- 4. JOKER GAME (REDESIGNED) ---
+        // --- 4. JOKER GAME (FLIP CARD) ---
         const roles = [
-            "🎭 Безумный Шляпник", 
+            "🎈 Пеннивайз", 
+            "🩸 Клоун-Мясник",
+            "🍿 Жертва Клоуна", 
+            "🎪 Бородатая Женщина", 
+            "🔪 Мишень Метателя", 
+            "🕷️ Человек-Паук", 
+            "🎭 Грустный Пьеро",
             "🦁 Укротитель Тигров", 
-            "🤸‍♀️ Воздушный Гимнаст", 
-            "🎪 Директор Цирка", 
-            "🔮 Гадалка", 
-            "🩸 Клоун-Мясник", 
             "🐻 Страшный Медведь",
-            "🤡 Клоун", 
-            "🔧 Сварщик", 
-            "💉 Доктор"
+            "🔮 Гадалка"
         ];
-        const resultDisplay = document.getElementById('joker-result');
-        let isSpinning = false;
+        const card = document.getElementById('tarot-card');
+        const cardInner = card.querySelector('.tarot-inner');
+        const roleText = document.getElementById('joker-role');
+        let isFlipping = false;
+        let currentRotation = 0;
 
         function playJokerGame(e) {
-            if(e) e.stopPropagation();
-            if (isSpinning) return;
-            
-            isSpinning = true;
+            if (e) e.stopPropagation();
+            if (isFlipping) return;
+            isFlipping = true;
             haptic('medium');
-            rainEmojis(['🃏','♦️','♣️']);
+            rainEmojis(['🎈','🤡','🔪']);
 
+            // Determine next rotation
+            // If 0, go to 180. If 180+, go +360 (full spin back to "back" face)
+            if (currentRotation === 0) {
+                currentRotation = 180;
+            } else {
+                currentRotation += 360;
+            }
+            
+            // Start animation
+            cardInner.style.transform = `rotateY(${currentRotation}deg)`;
+
+            // Update text logic
+            // If first flip (0->180), update immediately or halfway? 
+            // Halfway (90deg) is better to hide the change.
+            // If re-roll (180->540), we pass 270(edge), 360(front), 450(edge).
+            // We want the NEW role to be ready when we land on 540.
+            
+            // Spin visuals text update
             let counter = 0;
-            const maxSpins = 20;
             const interval = setInterval(() => {
-                resultDisplay.innerText = roles[Math.floor(Math.random() * roles.length)];
-                haptic('light');
+                // Rapidly cycle text during spin for effect
+                roleText.innerText = roles[Math.floor(Math.random() * roles.length)];
                 counter++;
+                if(counter > 8) clearInterval(interval);
+            }, 50);
 
-                if (counter >= maxSpins) {
-                    clearInterval(interval);
-                    const finalRole = roles[Math.floor(Math.random() * roles.length)];
-                    resultDisplay.innerText = finalRole;
-                    resultDisplay.style.color = "#D40000";
-                    haptic('success');
-                    isSpinning = false;
-                    rainEmojis(['✨']);
-                }
-            }, 60);
+            setTimeout(() => {
+                // Final role set
+                const finalRole = roles[Math.floor(Math.random() * roles.length)];
+                roleText.innerText = finalRole;
+                haptic('success');
+                isFlipping = false;
+                rainEmojis(['🎈']);
+            }, 400); // Update slightly before end of animation (0.8s)
         }
 
         // --- 5. VIDEO MODAL ---
@@ -520,7 +592,7 @@
 
         function openFullscreenVideo(videoSrc, ticketLink, titleText) {
             haptic('light');
-            if(!videoSrc || videoSrc === "") return;
+            if(!videoSrc) return;
             
             modalVideo.src = videoSrc;
             modalTitle.innerText = titleText;
