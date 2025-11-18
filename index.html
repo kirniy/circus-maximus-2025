@@ -528,8 +528,9 @@
             haptic('heavy');
             rainEmojis(['📞']);
             const phone = 'tel:+79214104440';
-            if (tg && tg.openLink) {
-                tg.openLink(phone);
+            // Fix based on reference project: use window.open with _blank for Telegram Web App on iOS
+            if (tg) {
+                window.open(phone, '_blank');
             } else {
                 window.location.href = phone;
             }
