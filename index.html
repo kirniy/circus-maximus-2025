@@ -82,44 +82,25 @@
         }
 
         .ticket-btn {
-            background: linear-gradient(135deg, #ffffff 0%, #d1d1d1 50%, #e8e8e8 100%);
-            color: #D40000;
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 9999px; /* Rounded full */
             position: relative;
-            overflow: visible; /* Allow border glow to show */
-            transition: transform 0.1s;
-            border: none;
+            transition: all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
             text-transform: uppercase;
             font-weight: 900;
             letter-spacing: 0.1em;
-            clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 80%, 95% 100%, 5% 100%, 0 80%, 0 20%);
-            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            box-shadow: 0 5px 0 #D40000; /* Red shadow for contrast/theme */
         }
-        .ticket-btn:active { transform: scale(0.95); }
-        
-        .ticket-btn::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, #fff, #8a0000, #fff);
-            z-index: -1;
-            clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 80%, 95% 100%, 5% 100%, 0 80%, 0 20%);
-            opacity: 0.5;
+        .ticket-btn:active { 
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #D40000;
         }
-
-        .ticket-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
-            transform: skewX(-20deg);
-            animation: shine 3s infinite;
-            pointer-events: none;
-        }
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
+        .ticket-btn:hover {
+            background: #D40000;
+            color: #ffffff;
+            border-color: #D40000;
         }
 
         /* 4. VIDEO MODAL */
@@ -672,11 +653,11 @@
             const target22 = new Date("2025-11-22T23:00:00+03:00"); // Moscow Time
 
             function formatTime(ms) {
-                if (ms < 0) return "LIVE NOW";
+                if (ms < 0) return "ШОУ ИДЕТ";
                 const d = Math.floor(ms / (1000 * 60 * 60 * 24));
                 const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-                return `${d}d ${h}h ${m}m`;
+                return `${d}д ${h}ч ${m}м`;
             }
 
             document.getElementById('countdown-21').innerText = formatTime(target21 - now);
