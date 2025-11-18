@@ -168,6 +168,9 @@
             padding: 8px 0;
             white-space: nowrap;
             position: relative;
+            /* Mask edges for smoother look */
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
         .marquee-content {
             display: inline-block;
@@ -176,10 +179,12 @@
             font-weight: 900;
             letter-spacing: 0.3em;
             color: #fff;
+            will-change: transform;
+            transform: translate3d(0, 0, 0); /* Hardware accel */
         }
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
         }
         
         /* 7. BALLOONS & RAIN */
@@ -319,8 +324,8 @@
         <!-- Ticker Fixed -->
         <div class="marquee-wrapper">
             <div class="marquee-content">
-                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
-                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
+                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • ЦИРКОВЫЕ МЕДВЕДИ • ТАНЦУЮЩИЕ КЛОУНЫ • КРУТЫЕ СИЛАЧИ •
+                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • ЦИРКОВЫЕ МЕДВЕДИ • ТАНЦУЮЩИЕ КЛОУНЫ • КРУТЫЕ СИЛАЧИ •
             </div>
         </div>
 
@@ -353,7 +358,7 @@
                     </div>
                     <div class="tarot-back">
                         <div class="tarot-pattern">
-                            <div class="text-4xl mb-2">🤡</div>
+                            <div class="text-4xl mb-2" id="joker-emoji">🤡</div>
                             <div id="joker-role" class="font-ruslan text-xl text-[#D40000] uppercase leading-none">Клоун</div>
                         </div>
                     </div>
@@ -559,20 +564,21 @@
 
         // --- 4. JOKER GAME (FLIP CARD) ---
         const roles = [
-            "🎈 Пеннивайз", 
-            "🩸 Клоун-Мясник",
-            "🍿 Жертва Клоуна", 
-            "🎪 Бородатая Женщина", 
-            "🔪 Мишень Метателя", 
-            "🕷️ Человек-Паук", 
-            "🎭 Грустный Пьеро",
-            "🦁 Укротитель Тигров", 
-            "🐻 Страшный Медведь",
-            "🔮 Гадалка"
+            { emoji: "🎈", text: "Пеннивайз" },
+            { emoji: "🩸", text: "Клоун-Мясник" },
+            { emoji: "🍿", text: "Жертва Клоуна" },
+            { emoji: "🎪", text: "Бородатая Женщина" },
+            { emoji: "🔪", text: "Мишень Метателя" },
+            { emoji: "🕷️", text: "Человек-Паук" },
+            { emoji: "🎭", text: "Грустный Пьеро" },
+            { emoji: "🦁", text: "Укротитель Тигров" },
+            { emoji: "🐻", text: "Страшный Медведь" },
+            { emoji: "🔮", text: "Гадалка" }
         ];
         const card = document.getElementById('tarot-card');
         const cardInner = card.querySelector('.tarot-inner');
         const roleText = document.getElementById('joker-role');
+        const roleEmoji = document.getElementById('joker-emoji');
         let isFlipping = false;
         let currentRotation = 0;
 
@@ -595,16 +601,13 @@
             cardInner.style.transform = `rotateY(${currentRotation}deg)`;
 
             // Update text logic
-            // If first flip (0->180), update immediately or halfway? 
-            // Halfway (90deg) is better to hide the change.
-            // If re-roll (180->540), we pass 270(edge), 360(front), 450(edge).
-            // We want the NEW role to be ready when we land on 540.
-            
             // Spin visuals text update
             let counter = 0;
             const interval = setInterval(() => {
                 // Rapidly cycle text during spin for effect
-                roleText.innerText = roles[Math.floor(Math.random() * roles.length)];
+                const random = roles[Math.floor(Math.random() * roles.length)];
+                roleText.innerText = random.text;
+                roleEmoji.innerText = random.emoji;
                 counter++;
                 if(counter > 8) clearInterval(interval);
             }, 50);
@@ -612,7 +615,8 @@
             setTimeout(() => {
                 // Final role set
                 const finalRole = roles[Math.floor(Math.random() * roles.length)];
-                roleText.innerText = finalRole;
+                roleText.innerText = finalRole.text;
+                roleEmoji.innerText = finalRole.emoji;
                 haptic('success');
                 isFlipping = false;
                 rainEmojis(['🎈']);
