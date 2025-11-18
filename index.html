@@ -194,18 +194,32 @@
         }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        .balloon {
+        .balloon-float {
             position: fixed;
-            bottom: -100px;
-            font-size: 40px;
-            opacity: 0.8;
+            bottom: -150px;
+            width: 60px;
+            height: 75px;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d 0%, #cc0000 40%, #800000 80%, #330000 100%);
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             z-index: -1;
             animation: floatUp 15s linear infinite;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+            box-shadow: inset -5px -5px 20px rgba(0,0,0,0.5), 5px 5px 20px rgba(0,0,0,0.3);
+            opacity: 0.9;
+        }
+        .balloon-float::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 40px;
+            background: rgba(255,255,255,0.3);
         }
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-120vh) rotate(20deg); }
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-60vh) rotate(10deg) scale(1.1); }
+            100% { transform: translateY(-120vh) rotate(-10deg) scale(1); }
         }
 
         /* 8. NEAT FATE CARD (COMPACT & STYLISH) */
@@ -221,12 +235,11 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.8s;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
         }
-        .tarot-container.flipped .tarot-inner {
-            transform: rotateY(180deg);
-        }
+        /* Continuous rotation logic handled in JS, but keep basic style */
+        
         .tarot-front, .tarot-back {
             position: absolute;
             width: 100%;
@@ -238,20 +251,35 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            overflow: hidden;
         }
+        
+        /* SPOOKY BALLOON BACKGROUND FOR CARD FRONT */
         .tarot-front {
-            background: #1a0000;
-            background-image: radial-gradient(#3f0000 15%, transparent 16%), radial-gradient(#3f0000 15%, transparent 16%);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+            background: radial-gradient(circle at 35% 35%, #ff4d4d 0%, #cc0000 30%, #800000 70%, #1a0000 100%);
+            position: relative;
         }
+        /* Shine effect */
+        .tarot-front::before {
+            content: '';
+            position: absolute;
+            top: 15%; left: 15%;
+            width: 20%; height: 15%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%);
+            transform: rotate(-45deg);
+            border-radius: 50%;
+        }
+        
         .tarot-back {
-            background: #fff;
-            color: #000;
-            transform: rotateY(180deg);
+            background: #000;
+            color: #fff;
+            transform: rotateY(180deg); /* Standard initial back state */
             padding: 10px;
             border-color: #D40000;
+            background-image: repeating-linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a), repeating-linear-gradient(45deg, #0a0a0a 25%, #000 25%, #000 75%, #0a0a0a 75%, #0a0a0a);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
         }
         .tarot-pattern {
             border: 2px solid #D40000;
@@ -260,6 +288,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            background: rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -281,9 +310,9 @@
     <div class="overlay"></div>
     
     <!-- Floating Balloons -->
-    <div class="balloon" style="left: 10%; animation-duration: 12s; animation-delay: 0s;" onclick="rainEmojis(['🎈'])">🎈</div>
-    <div class="balloon" style="left: 85%; animation-duration: 18s; animation-delay: 5s;" onclick="rainEmojis(['🎈'])">🎈</div>
-    <div class="balloon" style="left: 50%; animation-duration: 25s; animation-delay: 2s; font-size: 20px; opacity: 0.5;" onclick="rainEmojis(['🎈'])">🎈</div>
+    <div class="balloon-float" style="left: 10%; animation-duration: 12s; animation-delay: 0s;" onclick="rainEmojis(['🎈'])"></div>
+    <div class="balloon-float" style="left: 85%; animation-duration: 18s; animation-delay: 5s;" onclick="rainEmojis(['🎈'])"></div>
+    <div class="balloon-float" style="left: 50%; animation-duration: 25s; animation-delay: 2s; opacity: 0.5; transform: scale(0.7);" onclick="rainEmojis(['🎈'])"></div>
 
     <!-- 2. HEADER -->
     <header class="relative z-10 text-center" onclick="rainEmojis(['🎪','🎈','🤡'])">
@@ -428,9 +457,9 @@
 
              <div class="text-center border-t border-white/10 pt-8 pb-4">
                 <p class="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-4">VIP Reserve</p>
-                <a href="tel:89214104440" onclick="rainEmojis(['📞'])" class="inline-block px-8 py-3 bg-white text-black border-2 border-black rounded-full font-ruslan text-2xl hover:bg-red-600 hover:text-white transition duration-300 shadow-[0_5px_0_rgba(255,255,255,1)] active:translate-y-1 active:shadow-none">
+                <button onclick="callPhone()" class="inline-block px-8 py-3 bg-white text-black border-2 border-black rounded-full font-ruslan text-2xl hover:bg-red-600 hover:text-white transition duration-300 shadow-[0_5px_0_rgba(255,255,255,1)] active:translate-y-1 active:shadow-none">
                     8-921-410-44-40
-                </a>
+                </button>
             </div>
         </section>
 
@@ -484,7 +513,7 @@
         // --- 1. TELEGRAM ---
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.enableClosingConfirmation();
+        // tg.enableClosingConfirmation(); // Disabled as per request
         tg.setHeaderColor('#D40000');
         tg.setBackgroundColor('#000000');
 
@@ -492,6 +521,12 @@
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('heavy');
             }
+        }
+
+        function callPhone() {
+            haptic('heavy');
+            rainEmojis(['📞']);
+            window.location.href = 'tel:89214104440';
         }
 
         // --- 2. PRELOADER ---
