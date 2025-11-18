@@ -82,27 +82,39 @@
         }
 
         .ticket-btn {
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #d1d1d1 50%, #e8e8e8 100%);
             color: #D40000;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Allow border glow to show */
             transition: transform 0.1s;
             border: none;
             text-transform: uppercase;
             font-weight: 900;
             letter-spacing: 0.1em;
             clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 80%, 95% 100%, 5% 100%, 0 80%, 0 20%);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
         }
         .ticket-btn:active { transform: scale(0.95); }
         
+        .ticket-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #fff, #8a0000, #fff);
+            z-index: -1;
+            clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 80%, 95% 100%, 5% 100%, 0 80%, 0 20%);
+            opacity: 0.5;
+        }
+
         .ticket-btn::after {
             content: '';
             position: absolute;
             top: 0; left: -100%;
             width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(212,0,0,0.2), transparent);
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
             transform: skewX(-20deg);
             animation: shine 3s infinite;
+            pointer-events: none;
         }
         @keyframes shine {
             0% { left: -100%; }
@@ -214,12 +226,13 @@
         .balloon-float::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            top: 98%; /* Attach to bottom */
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 40px;
-            background: rgba(255,255,255,0.3);
+            width: 1px;
+            height: 60px;
+            background: rgba(255,255,255,0.4);
+            z-index: -2; /* Behind balloon */
         }
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg) scale(1); }
@@ -378,9 +391,10 @@
                      onclick="openFullscreenVideo('21-11.mp4', 'https://vnvnc.ru/e/21-11-25-2300', '21.11 | Friday')">
                     <video src="21-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 w-full p-6">
+                    <div class="absolute bottom-0 left-0 w-full p-6 z-10">
                         <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">21.11</h2>
-                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Пятница</p>
+                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2 mb-1">Пятница</p>
+                        <div id="countdown-21" class="text-xs text-white/90 font-mono bg-black/50 inline-block px-2 rounded border border-white/20 mt-1">Loading...</div>
                     </div>
                 </div>
                 <!-- CARD 2 -->
@@ -388,9 +402,10 @@
                      onclick="openFullscreenVideo('22-11.mp4', 'https://vnvnc.ru/e/22-11-25', '22.11 | Saturday')">
                     <video src="22-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 w-full p-6">
+                    <div class="absolute bottom-0 left-0 w-full p-6 z-10">
                         <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">22.11</h2>
-                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Суббота</p>
+                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2 mb-1">Суббота</p>
+                        <div id="countdown-22" class="text-xs text-white/90 font-mono bg-black/50 inline-block px-2 rounded border border-white/20 mt-1">Loading...</div>
                     </div>
                 </div>
             </div>
@@ -426,7 +441,7 @@
                     </div>
                 </div>
                 <div class="text-center text-[10px] uppercase tracking-widest opacity-80 pt-2 font-bold">
-                    Dress Code: Red & White Circles / Circus Attire
+                    Dress Code: красные и белые тона / клоуны / цирк
                 </div>
             </div>
 
@@ -650,6 +665,25 @@
                 modalVideo.src = "";
             }, 300);
         }
+        // --- 6. COUNTDOWN TIMER ---
+        function updateCountdowns() {
+            const now = new Date();
+            const target21 = new Date("2025-11-21T23:00:00+03:00"); // Moscow Time
+            const target22 = new Date("2025-11-22T23:00:00+03:00"); // Moscow Time
+
+            function formatTime(ms) {
+                if (ms < 0) return "LIVE NOW";
+                const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+                const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+                return `${d}d ${h}h ${m}m`;
+            }
+
+            document.getElementById('countdown-21').innerText = formatTime(target21 - now);
+            document.getElementById('countdown-22').innerText = formatTime(target22 - now);
+        }
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
     </script>
 </body>
 </html>
