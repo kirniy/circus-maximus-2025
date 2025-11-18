@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VNVNC CIRCUS MAXIMUS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&family=Ruslan+Display&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --red-primary: #D40000;
+            --red-dark: #8a0000;
+            --white-pure: #FFFFFF;
+            --black: #000000;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000;
+            color: white;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+        }
+
+        /* 1. BACKGROUND - CRISP RED & WHITE */
+        .circus-bg {
+            position: fixed;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: repeating-conic-gradient(
+                from 0deg,
+                #ffffff 0deg 15deg,
+                #D40000 15deg 30deg
+            );
+            animation: rotate-bg 80s linear infinite;
+            z-index: -2;
+            /* No blur, keeping it crisp as requested */
+        }
+        
+        /* Slight overlay for readability, but NOT blurred */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4); 
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes rotate-bg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 2. TYPOGRAPHY */
+        .font-ruslan { font-family: 'Ruslan Display', cursive; }
+        
+        .neon-glitch {
+            text-shadow: 3px 3px 0px var(--red-primary), -2px -2px 0px #fff;
+            animation: glitch 3s infinite alternate;
+        }
+        @keyframes glitch {
+            0% { opacity: 1; transform: skew(0deg); }
+            95% { opacity: 1; transform: skew(0deg); }
+            96% { opacity: 0.9; transform: skew(5deg); }
+            98% { opacity: 0.95; transform: skew(0deg); }
+            100% { opacity: 1; transform: skew(0deg); }
+        }
+
+        /* 3. UI ELEMENTS - NO YELLOW */
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .ticket-btn {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            color: #D40000;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s;
+            border: none;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 80%, 95% 100%, 5% 100%, 0 80%, 0 20%);
+        }
+        .ticket-btn:active { transform: scale(0.95); }
+        
+        .ticket-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(212,0,0,0.2), transparent);
+            transform: skewX(-20deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* 4. VIDEO MODAL */
+        #video-modal {
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #video-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* 5. REAL CURTAINS (RED VELVET) */
+        #curtain-left, #curtain-right {
+            position: fixed;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            /* Rich Red Velvet */
+            background: repeating-linear-gradient(90deg, #8a0000, #8a0000 10px, #5c0000 10px, #5c0000 20px);
+            z-index: 100;
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px #000;
+        }
+        #curtain-left { left: 0; transform-origin: left; border-right: 2px solid #4a0000; }
+        #curtain-right { right: 0; transform-origin: right; border-left: 2px solid #4a0000; }
+        
+        /* Logo Container in Loader */
+        .loader-logo-container {
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(212, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0); }
+        }
+
+        body.loaded #curtain-left { transform: translateX(-100%); }
+        body.loaded #curtain-right { transform: translateX(100%); }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Marquee */
+        .marquee-container {
+            background: #000;
+            border-bottom: 1px solid #fff;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        /* Animations */
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 32px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fall linear forwards;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        /* CARD DESIGN IMPROVED */
+        .fate-card {
+            background: #fff;
+            border: 4px solid #D40000;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 0 #8a0000;
+            transition: transform 0.1s;
+        }
+        .fate-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #fff0f0 10px, #fff0f0 20px);
+            z-index: 0;
+        }
+        .fate-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 6px 0 #8a0000;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-8 select-none">
+
+    <!-- 0. PRELOADER -->
+    <div id="loader" class="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center">
+        <div id="curtain-left"></div>
+        <div id="curtain-right"></div>
+        <!-- LOGO ONLY -->
+        <div id="loader-text" class="absolute z-[101] transition-opacity duration-500">
+            <div class="loader-logo-container">
+                <img src="vnvnc-logo-classic-border.svg" class="w-28 h-28 drop-shadow-2xl" alt="VNVNC">
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. BACKGROUNDS -->
+    <div class="circus-bg"></div>
+    <div class="overlay"></div>
+
+    <!-- 2. HEADER -->
+    <header class="relative z-10 text-center" onclick="rainEmojis(['🎪','🎈','🤡'])">
+        <!-- Ticker -->
+        <div class="marquee-wrapper bg-black border-b border-white/20 py-2 overflow-hidden">
+            <div class="inline-block whitespace-nowrap animate-[marquee_20s_linear_infinite] text-[10px] font-black text-white tracking-[0.3em]">
+                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
+                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • КРОВАВЫЕ КОКТЕЙЛИ • ДЕРЗКИЕ ПРОХОДКИ •
+            </div>
+        </div>
+
+        <div class="px-4 pt-6 relative flex flex-col items-center justify-center">
+            <div class="absolute top-6 left-4 text-3xl animate-bounce cursor-pointer hover:scale-125 transition" onclick="rainEmojis(['🎈'])">🎈</div>
+            <div class="absolute top-10 right-6 text-3xl animate-bounce cursor-pointer hover:scale-125 transition" style="animation-delay: 0.5s" onclick="rainEmojis(['🎩'])">🎩</div>
+
+            <h1 class="text-6xl font-ruslan text-white uppercase leading-[0.85] neon-glitch drop-shadow-2xl">
+                Circus<br><span class="text-[#D40000] drop-shadow-[0_0_15px_rgba(212,0,0,0.8)]">Maximus</span>
+            </h1>
+            
+            <div class="mt-5 flex justify-center items-center gap-3">
+                <div class="h-[1px] w-10 bg-white"></div>
+                <span class="text-xs font-black tracking-[0.4em] text-white uppercase border border-white px-3 py-1 rounded-full">Episode 2</span>
+                <div class="h-[1px] w-10 bg-white"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 flex-grow flex flex-col gap-10 mt-8">
+
+        <!-- 3. FATE GAME (BETTER DESIGN) -->
+        <section class="px-4">
+            <div class="glass-panel p-6 text-center relative overflow-visible">
+                <h3 class="text-[10px] font-black text-white/50 uppercase tracking-[0.3em] mb-4">🃏 Узнай свою судьбу</h3>
+                
+                <button onclick="playJokerGame(event)" class="fate-card w-full py-6 flex flex-col items-center justify-center gap-2 group">
+                    <div class="relative z-10 flex flex-col items-center">
+                        <span class="text-4xl mb-2 group-active:scale-110 transition-transform">🃏</span>
+                        <span id="joker-result" class="font-ruslan text-2xl text-black uppercase tracking-wide">Вытянуть Карту</span>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. VIDEO CAROUSEL (NO PLAY BUTTONS) -->
+        <section>
+            <div class="flex overflow-x-auto snap-x snap-mandatory px-4 gap-5 no-scrollbar pb-6">
+                
+                <!-- CARD 1 -->
+                <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
+                     onclick="openFullscreenVideo('21-11.mp4', 'https://vnvnc.ru/e/21-11-25-2300', '21.11 | Friday')">
+                    <video src="21-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">21.11</h2>
+                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Пятница</p>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
+                     onclick="openFullscreenVideo('22-11.mp4', 'https://vnvnc.ru/e/22-11-25', '22.11 | Saturday')">
+                    <video src="22-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted loop playsinline></video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">22.11</h2>
+                        <p class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2">Суббота</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. EVENT DETAILS -->
+        <section class="px-4 text-sm text-white leading-relaxed space-y-8">
+            
+            <div class="text-center space-y-3" onclick="rainEmojis(['🍿'])">
+                 <p class="text-3xl font-bold text-white font-ruslan tracking-wider drop-shadow-md">SHOWTIME</p>
+                 <div class="w-12 h-1 bg-white mx-auto rounded-full"></div>
+                 <p class="opacity-90 uppercase tracking-widest text-xs font-bold">VNVNC превращается в цирк!</p>
+            </div>
+
+            <div class="glass-panel p-8 space-y-6 relative border-t-4 border-t-white" onclick="rainEmojis(['🦁','🎭'])">
+                <div class="absolute -top-5 -left-2 text-4xl rotate-[-10deg] drop-shadow-md">🎟️</div>
+                
+                <p class="text-center font-medium text-sm leading-relaxed">
+                    🤹‍♀️ Готовьтесь к возвращению волшебства - в VNVNC снова гастролирует аутентичный цирк!
+                    <br><br>
+                    21 и 22 ноября в нашем шатре музыка, яркие костюмы и тематические декорации сделают тебя частью грандиозного шоу. Танцпол станет ареной, гости - артистами! 🎩
+                </p>
+                
+                <!-- Stylish List -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
+                        <span class="text-2xl">🤩</span>
+                        <span class="font-bold text-xs">Бармены-фокусники с коктейлями</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
+                        <span class="text-2xl">🤩</span>
+                        <span class="font-bold text-xs">Диджей-дрессировщик хитов</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
+                        <span class="text-2xl">🤩</span>
+                        <span class="font-bold text-xs">Цирковые персонажи и безумие</span>
+                    </div>
+                </div>
+                
+                <div class="text-center text-[10px] uppercase tracking-widest opacity-80 pt-2 font-bold">
+                    Dress Code: Red & White Circles / Circus Attire
+                </div>
+            </div>
+
+            <!-- Info Grid -->
+            <div class="grid grid-cols-2 gap-4 text-center">
+                <a href="https://yandex.ru/maps/-/CLGtRGyV" target="_blank" class="bg-black hover:bg-white/10 p-5 rounded-2xl border border-white/20 transition active:scale-95 flex flex-col items-center justify-center group shadow-lg" onclick="rainEmojis(['📍'])">
+                    <div class="text-red-600 font-black mb-2 text-[10px] tracking-widest group-hover:scale-110 transition-transform bg-white px-2 rounded">ГДЕ?</div>
+                    <div class="font-ruslan text-xl text-white">Конюшенная 2В</div>
+                </a>
+                <div class="bg-black p-5 rounded-2xl border border-white/20 flex flex-col items-center justify-center shadow-lg" onclick="rainEmojis(['⏰'])">
+                    <div class="text-red-600 font-black mb-2 text-[10px] tracking-widest bg-white px-2 rounded">КОГДА?</div>
+                    <div class="font-ruslan text-xl text-white">ЭТИ ВЫХОДНЫЕ</div>
+                    <div class="font-mono text-[10px] text-gray-400 mt-1">23:00 – 07:00</div>
+                </div>
+            </div>
+            
+            <div class="text-center text-[10px] font-bold text-white bg-red-700 py-3 rounded-lg border border-white shadow-md">
+                ⚠️ НЕ ЗАБУДЬ ОРИГИНАЛЫ ДОКУМЕНТОВ (18+)
+            </div>
+
+            <!-- Buttons High Taste -->
+            <div class="space-y-4 pt-4">
+                <a href="https://vnvnc.ru/e/21-11-25-2300" onclick="haptic('light')" class="ticket-btn block w-full py-5 text-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-xl">
+                    TICKETS 21.11
+                </a>
+                <a href="https://vnvnc.ru/e/22-11-25" onclick="haptic('light')" class="ticket-btn block w-full py-5 text-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-xl">
+                    TICKETS 22.11
+                </a>
+                <div class="text-center text-[10px] uppercase tracking-widest text-white/60 font-bold">
+                    Билет или бронь стола — проход без очереди!
+                </div>
+            </div>
+
+             <div class="text-center border-t border-white/10 pt-8 pb-4">
+                <p class="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-4">VIP Reserve</p>
+                <a href="tel:89214104440" onclick="rainEmojis(['📞'])" class="inline-block px-8 py-3 bg-white text-black border-2 border-black rounded-full font-ruslan text-2xl hover:bg-red-600 hover:text-white transition duration-300 shadow-[0_5px_0_rgba(255,255,255,1)] active:translate-y-1 active:shadow-none">
+                    8-921-410-44-40
+                </a>
+            </div>
+        </section>
+
+        <!-- 6. SOCIAL FOOTER (POLISHED) -->
+        <footer class="mt-6 px-4 pb-12">
+            <!-- 4 Buttons Grid -->
+            <div class="grid grid-cols-4 gap-3 mb-10">
+                <a href="https://t.me/vnvnc_spb" onclick="haptic('light')" class="bg-white/10 border border-white/20 flex flex-col items-center justify-center py-3 rounded-xl active:bg-white/20 transition">
+                    <svg class="w-5 h-5 text-white fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.696.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.751-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.119.098.152.228.166.319.016.101.016.205.01.318z"/></svg>
+                    <span class="text-[8px] font-bold text-white mt-1">TELEGRAM</span>
+                </a>
+                <a href="https://vnvnc.ru" onclick="haptic('light')" class="bg-white/10 border border-white/20 flex flex-col items-center justify-center py-3 rounded-xl active:bg-white/20 transition">
+                    <span class="text-lg mb-1">🌐</span>
+                    <span class="text-[8px] font-bold text-white mt-1">WEBSITE</span>
+                </a>
+                <a href="https://instagram.com/vnvnc_spb" onclick="haptic('light')" class="bg-white/10 border border-white/20 flex flex-col items-center justify-center py-3 rounded-xl active:bg-white/20 transition">
+                    <svg class="w-5 h-5 text-white fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <span class="text-[8px] font-bold text-white mt-1">INSTA</span>
+                </a>
+                <a href="https://t.me/vnvncbattlebot" onclick="haptic('light')" class="bg-white/10 border border-white/20 flex flex-col items-center justify-center py-3 rounded-xl active:bg-white/20 transition">
+                    <span class="text-lg mb-1">🤖</span>
+                    <span class="text-[8px] font-bold text-white mt-1">BOT</span>
+                </a>
+            </div>
+
+            <div class="flex flex-col items-center gap-4">
+                <img src="vnvnc-logo-classic-border.svg" class="w-16 h-16 opacity-100 drop-shadow-lg" alt="VNVNC">
+                <p class="text-[10px] font-mono tracking-widest text-white/60">
+                    © 2025 VNVNC. ALL RIGHTS RESERVED.
+                </p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 7. FULLSCREEN VIDEO MODAL -->
+    <div id="video-modal" class="fixed inset-0 z-50 flex flex-col bg-black">
+        <!-- Close Button -->
+        <button onclick="closeVideo()" class="absolute top-4 right-4 z-20 bg-black/50 rounded-full p-2 text-white border border-white/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <!-- Video Player -->
+        <div class="flex-1 relative flex items-center justify-center bg-black">
+            <video id="modal-video" class="w-full h-full object-contain" loop playsinline></video>
+        </div>
+
+        <!-- Action Bar in Modal -->
+        <div class="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+            <h3 id="modal-title" class="text-2xl font-ruslan text-white mb-4 text-center drop-shadow-md">DATE</h3>
+            <a id="modal-btn" href="#" onclick="haptic('medium')" class="ticket-btn block w-full py-4 text-center text-lg">
+                КУПИТЬ БИЛЕТ
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. TELEGRAM INITIALIZATION ---
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+        tg.setHeaderColor('#D40000');
+        tg.setBackgroundColor('#000000');
+
+        function haptic(type) {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('heavy');
+            }
+        }
+
+        // --- 2. PRELOADER ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader-text').style.opacity = '0';
+                setTimeout(() => {
+                    document.body.classList.add('loaded');
+                    haptic('success');
+                }, 500);
+            }, 1200);
+        });
+
+        // --- 3. RAIN ANIMATION ---
+        function rainEmojis(emojiList) {
+            haptic('light');
+            const count = 8; 
+            for(let i=0; i<count; i++) {
+                const el = document.createElement('div');
+                el.innerText = emojiList[Math.floor(Math.random() * emojiList.length)];
+                el.className = 'emoji-rain';
+                el.style.left = (Math.random() * 90) + 'vw';
+                el.style.animationDuration = (2 + Math.random() * 3) + 's';
+                el.style.animationDelay = (Math.random() * 0.5) + 's';
+                el.style.fontSize = (20 + Math.random() * 20) + 'px';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 4000);
+            }
+        }
+
+        // --- 4. JOKER GAME (REDESIGNED) ---
+        const roles = [
+            "🎭 Безумный Шляпник", 
+            "🦁 Укротитель Тигров", 
+            "🤸‍♀️ Воздушный Гимнаст", 
+            "🎪 Директор Цирка", 
+            "🔮 Гадалка", 
+            "🩸 Клоун-Мясник", 
+            "🐻 Страшный Медведь",
+            "🤡 Клоун", 
+            "🔧 Сварщик", 
+            "💉 Доктор"
+        ];
+        const resultDisplay = document.getElementById('joker-result');
+        let isSpinning = false;
+
+        function playJokerGame(e) {
+            if(e) e.stopPropagation();
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            haptic('medium');
+            rainEmojis(['🃏','♦️','♣️']);
+
+            let counter = 0;
+            const maxSpins = 20;
+            const interval = setInterval(() => {
+                resultDisplay.innerText = roles[Math.floor(Math.random() * roles.length)];
+                haptic('light');
+                counter++;
+
+                if (counter >= maxSpins) {
+                    clearInterval(interval);
+                    const finalRole = roles[Math.floor(Math.random() * roles.length)];
+                    resultDisplay.innerText = finalRole;
+                    resultDisplay.style.color = "#D40000";
+                    haptic('success');
+                    isSpinning = false;
+                    rainEmojis(['✨']);
+                }
+            }, 60);
+        }
+
+        // --- 5. VIDEO MODAL ---
+        const modal = document.getElementById('video-modal');
+        const modalVideo = document.getElementById('modal-video');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBtn = document.getElementById('modal-btn');
+
+        function openFullscreenVideo(videoSrc, ticketLink, titleText) {
+            haptic('light');
+            if(!videoSrc || videoSrc === "") return;
+            
+            modalVideo.src = videoSrc;
+            modalTitle.innerText = titleText;
+            modalBtn.href = ticketLink;
+            
+            modal.classList.add('active');
+            modalVideo.play().catch(e => console.log("Autoplay blocked", e));
+            modalVideo.muted = false; 
+        }
+
+        function closeVideo() {
+            haptic('light');
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modalVideo.pause();
+                modalVideo.src = "";
+            }, 300);
+        }
+    </script>
+</body>
+</html>
