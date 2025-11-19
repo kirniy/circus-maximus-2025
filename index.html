@@ -25,10 +25,32 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #000;
-            color: white;
+            color: #fff;
             overflow-x: hidden;
+            overscroll-behavior: none;
+            /* Prevent pull-to-refresh/close */
             -webkit-tap-highlight-color: transparent;
-            cursor: pointer;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(212, 0, 0, 0.7);
+                transform: scale(1);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(212, 0, 0, 0);
+                transform: scale(1.05);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 0, 0, 0);
+                transform: scale(1);
+            }
+        }
+
+        .animate-pulse-red {
+            animation: pulse-red 2s infinite;
         }
 
         /* 1. BACKGROUND */
@@ -739,10 +761,11 @@
 
             <!-- Music Toggle Centered & Circus Styled -->
             <button id="music-toggle" onclick="toggleMusic()"
-                class="mt-6 w-12 h-12 bg-[#D40000] border-2 border-white rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(212,0,0,0.6)] transition-all active:scale-90 hover:scale-105 hover:bg-[#b30000] z-20">
+                class="mt-6 w-14 h-14 bg-[#D40000] border-2 border-[#FFD700] rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(212,0,0,0.8)] transition-all active:scale-90 hover:scale-110 z-20 animate-pulse-red">
                 <span id="music-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 drop-shadow-md" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
                         <line x1="23" y1="9" x2="17" y2="15"></line>
                         <line x1="17" y1="9" x2="23" y2="15"></line>
@@ -754,7 +777,25 @@
 
     <!-- MENU IMAGE MODAL -->
     <div id="menu-image-modal" onclick="closeMenuImage(); haptic('light')">
-        <img id="menu-modal-img" src="" alt="Cocktail">
+        <div class="relative max-w-[90%] max-h-[90%] flex flex-col items-center" onclick="event.stopPropagation()">
+            <img id="menu-modal-img" src="" alt="Menu Item"
+                class="rounded-xl shadow-2xl border-2 border-[#D40000] max-h-[60vh] object-contain bg-black">
+
+            <div class="mt-4 text-center bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/20 w-full">
+                <h3 id="menu-modal-title" class="text-2xl font-ruslan text-[#D40000] mb-2 drop-shadow-md">COCKTAIL NAME
+                </h3>
+                <p id="menu-modal-ingredients" class="text-sm text-white/80 font-mono mb-3 leading-relaxed">Ingredients
+                    list...</p>
+                <div id="menu-modal-price"
+                    class="text-xl font-bold text-white border-t border-white/20 pt-2 inline-block px-4">000₽</div>
+            </div>
+        </div>
+        <button class="absolute top-8 right-8 text-white/80 hover:text-white" onclick="closeMenuImage()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 drop-shadow-lg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
     </div>
 
     <!-- SPECIAL MENU TRIGGER (CUSTOM SVG) -->
@@ -784,7 +825,8 @@
             <div class="menu-section-header">COCKTAILS</div>
 
             <!-- COCKTAIL 1: CIRCUS OF CLOUDS -->
-            <div class="victorian-card" onclick="openMenuImage('circus_clouds_1763555375837.png'); haptic('medium')">
+            <div class="victorian-card"
+                onclick="openMenuImage('circus_clouds_1763555375837.png', 'CIRCUS OF CLOUDS', 'Vodka • Soju grape • Lemon fresh • Sakura syrup • Tonic', '650₽'); haptic('medium')">
                 <div class="victorian-img-arch">
                     <img src="circus_clouds_1763555375837.png" alt="Circus of Clouds">
                 </div>
@@ -797,7 +839,8 @@
             </div>
 
             <!-- COCKTAIL 2: CIRCUS OF CREAM -->
-            <div class="victorian-card" onclick="openMenuImage('circus_cream_1763555383366.png'); haptic('medium')">
+            <div class="victorian-card"
+                onclick="openMenuImage('circus_cream_1763555383366.png', 'CIRCUS OF CREAM', 'Niva distillery cream • Rum • Peach syrup • Lemon fresh • Pineapple juice', '750₽'); haptic('medium')">
                 <div class="victorian-img-arch">
                     <img src="circus_cream_1763555383366.png" alt="Circus of Cream">
                 </div>
@@ -810,7 +853,8 @@
             </div>
 
             <!-- COCKTAIL 3: CIRCUS LONG -->
-            <div class="victorian-card" onclick="openMenuImage('circus_long_1763555390358.png'); haptic('medium')">
+            <div class="victorian-card"
+                onclick="openMenuImage('circus_long_1763555390358.png', 'CIRCUS LONG', 'Vodka • Gin • Tequila • Niva Blue Curaçao • Cherry syrup • Lemon fresh • Sprite', '850₽'); haptic('medium')">
                 <div class="victorian-img-arch">
                     <img src="circus_long_1763555390358.png" alt="Circus Long">
                 </div>
@@ -826,7 +870,8 @@
             <div class="menu-section-header">SHOT SETS</div>
 
             <!-- SHOT SET 1: BLUE TRICK -->
-            <div class="victorian-card" onclick="openMenuImage('blue_trick_shots_1763555397980.png'); haptic('medium')">
+            <div class="victorian-card"
+                onclick="openMenuImage('blue_trick_shots_1763555397980.png', 'BLUE TRICK', 'Vodka • Niva distillery • Lemon fresh • Blueberry syrup', '1100₽'); haptic('medium')">
                 <div class="victorian-img-arch">
                     <img src="blue_trick_shots_1763555397980.png" alt="Blue Trick">
                 </div>
@@ -840,7 +885,7 @@
 
             <!-- SHOT SET 2: SPICY CLOWN -->
             <div class="victorian-card"
-                onclick="openMenuImage('spicy_clown_shots_1763555405311.png'); haptic('medium')">
+                onclick="openMenuImage('spicy_clown_shots_1763555405311.png', 'SPICY CLOWN', 'Rum • Niva distillery apple • Spicy mango syrup • Lemon fresh', '1100₽'); haptic('medium')">
                 <div class="victorian-img-arch">
                     <img src="spicy_clown_shots_1763555405311.png" alt="Spicy Clown">
                 </div>
@@ -937,11 +982,11 @@
             <div class="glass-panel p-8 space-y-6 relative border-t-4 border-t-white" onclick="rainEmojis(['🦁','🎭'])">
                 <div class="absolute -top-5 -left-2 text-4xl rotate-[-10deg] drop-shadow-md">🎟️</div>
                 <p class="text-center font-medium text-sm leading-relaxed">
-                    🎪 <strong>CIRCUS MAXIMUS</strong> — это яркий, шумный и величественный викторианский цирк!
+                    🤹‍♀️ <strong>CIRCUS MAXIMUS</strong> — в VNVNC снова гастролирует аутентичный цирк!
                     <br><br>
-                    Шесть харизматичных артистов, надувные медведи и клоуны создают атмосферу управляемого хаоса.
-                    Это не просто вечеринка, это грандиозное театральное зрелище, где МС начинают шоу прямо из
-                    представления! 🎩
+                    21 и 22 ноября — это две ночи безудержного веселья и управляемого хаоса. Шесть харизматичных
+                    артистов, надувные медведи и клоуны создадут атмосферу праздника, где танцпол станет ареной, а
+                    каждый гость — частью представления. 🎩
                 </p>
                 <div class="space-y-4">
                     <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20"
@@ -1082,7 +1127,7 @@
         // --- 1. TELEGRAM ---
         const tg = window.Telegram.WebApp;
         tg.expand();
-        // tg.enableClosingConfirmation(); // Disabled as per request
+        tg.enableClosingConfirmation(); // Enabled to prevent accidental closing
         tg.setHeaderColor('#D40000');
         tg.setBackgroundColor('#000000');
 
@@ -1276,9 +1321,15 @@
         // --- 5. MENU IMAGE MODAL ---
         const menuModal = document.getElementById('menu-image-modal');
         const menuModalImg = document.getElementById('menu-modal-img');
+        const menuModalTitle = document.getElementById('menu-modal-title');
+        const menuModalIngredients = document.getElementById('menu-modal-ingredients');
+        const menuModalPrice = document.getElementById('menu-modal-price');
 
-        function openMenuImage(src) {
+        function openMenuImage(src, title, ingredients, price) {
             menuModalImg.src = src;
+            if (title) menuModalTitle.innerText = title;
+            if (ingredients) menuModalIngredients.innerText = ingredients;
+            if (price) menuModalPrice.innerText = price;
             menuModal.classList.add('active');
         }
 
