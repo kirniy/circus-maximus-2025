@@ -1173,7 +1173,22 @@
         const roleEmoji = document.getElementById('joker-emoji');
         let isFlipping = false;
         let currentRotation = 0;
-        let lastRoleIndex = -1;
+
+        // Deck Logic
+        let deck = [];
+
+        function shuffleDeck() {
+            deck = [...roles];
+            // Fisher-Yates Shuffle
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            console.log("Deck shuffled!", deck.length, "cards");
+        }
+
+        // Initial shuffle
+        shuffleDeck();
 
         function playJokerGame(e) {
             if (e) e.stopPropagation();
@@ -1197,14 +1212,12 @@
             // just wait for the reveal.
 
             setTimeout(() => {
-                // Final role set - NO REPEATS
-                let newIndex;
-                do {
-                    newIndex = Math.floor(Math.random() * roles.length);
-                } while (newIndex === lastRoleIndex);
-
-                lastRoleIndex = newIndex;
-                const finalRole = roles[newIndex];
+                // Draw card from deck
+                if (deck.length === 0) {
+                    shuffleDeck();
+                }
+                const finalRole = deck.pop();
+                console.log("Card drawn:", finalRole.text, "Remaining:", deck.length);
 
                 // FIX: Update the BACK side which is now visible (or will be)
                 if (finalRole.image) {
