@@ -1,0 +1,13 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-scarlet-v3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff4d4d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <text x="50%" y="55%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="36" fill="url(#grad-scarlet-v3)" letter-spacing="3">
+    SCARLET SAILS
+  </text>
+  <path d="M150,75 Q200,90 250,75" fill="none" stroke="#D40000" stroke-width="1" opacity="0.6"/>
+</svg>

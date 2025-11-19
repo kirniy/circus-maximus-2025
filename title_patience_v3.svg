@@ -1,0 +1,15 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow-v3" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Elegant Divider -->
+  <path d="M100,85 L300,85" stroke="#D40000" stroke-width="0.5" opacity="0.5"/>
+  <circle cx="200" cy="85" r="2" fill="#D40000"/>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="42" fill="#fff" stroke="#D40000" stroke-width="0.5" filter="url(#glow-v3)" letter-spacing="6">
+    PATIENCE
+  </text>
+</svg>

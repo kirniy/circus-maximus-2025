@@ -1,0 +1,11 @@
+<svg width="400" height="100" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0000FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00FFFF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <text x="50%" y="60%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="34" fill="url(#grad-blue)" stroke="#fff" stroke-width="0.5" letter-spacing="3">
+    BLUE TRICK
+  </text>
+</svg>

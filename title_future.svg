@@ -1,0 +1,20 @@
+<svg width="400" height="150" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="neon-future-2">
+        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+        <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    </filter>
+  </defs>
+  <!-- Crystal Ball / Circle motif -->
+  <circle cx="200" cy="75" r="60" fill="none" stroke="#00ffff" stroke-width="1" opacity="0.2"/>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="65" fill="none" stroke="#00ffff" stroke-width="1.5" filter="url(#neon-future-2)" letter-spacing="8">
+    FUTURE
+  </text>
+    <text x="50%" y="88%" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="10" fill="#00ffff" letter-spacing="4" text-transform="uppercase" opacity="0.8">
+    ~ The Prophecy ~
+  </text>
+</svg>

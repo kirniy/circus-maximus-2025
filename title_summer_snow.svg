@@ -1,0 +1,17 @@
+<svg width="500" height="150" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="snow-blur">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+  <!-- Snowflake/Frost motifs -->
+  <text x="100" y="50" font-size="30" fill="#fff" opacity="0.3">❄</text>
+  <text x="400" y="50" font-size="30" fill="#fff" opacity="0.3">❄</text>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="48" fill="#fff" stroke="#8a0000" stroke-width="0.5" letter-spacing="4">
+    SUMMER SNOW
+  </text>
+  <text x="50%" y="88%" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="10" fill="#ccc" letter-spacing="4" text-transform="uppercase">
+    ~ Frozen Illusion ~
+  </text>
+</svg>

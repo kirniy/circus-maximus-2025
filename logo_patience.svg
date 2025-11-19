@@ -1,0 +1,18 @@
+<svg width="400" height="150" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow-rus" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Ornate flourishes -->
+  <path d="M50,75 Q100,40 200,40 Q300,40 350,75" fill="none" stroke="#D40000" stroke-width="1" opacity="0.6"/>
+  <path d="M50,75 Q100,110 200,110 Q300,110 350,75" fill="none" stroke="#D40000" stroke-width="1" opacity="0.6"/>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="50" fill="#fff" stroke="#D40000" stroke-width="0.5" filter="url(#glow-rus)" letter-spacing="4">
+    ТЕРПЕНИЕ
+  </text>
+  <text x="50%" y="85%" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="9" fill="#D40000" letter-spacing="3" text-transform="uppercase">
+    ~ ИСКУССТВО ОЖИДАНИЯ ~
+  </text>
+</svg>

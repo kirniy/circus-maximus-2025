@@ -1,0 +1,20 @@
+<svg width="400" height="150" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="neon-future-rus">
+        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+        <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    </filter>
+  </defs>
+  <!-- Mystical Circle -->
+  <circle cx="200" cy="75" r="55" fill="none" stroke="#00ffff" stroke-width="0.5" opacity="0.3"/>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="55" fill="none" stroke="#00ffff" stroke-width="1.5" filter="url(#neon-future-rus)" letter-spacing="6">
+    БУДУЩЕЕ
+  </text>
+  <text x="50%" y="88%" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="9" fill="#00ffff" letter-spacing="3" text-transform="uppercase" opacity="0.8">
+    ~ ТАЙНА СУДЬБЫ ~
+  </text>
+</svg>

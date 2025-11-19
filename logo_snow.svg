@@ -1,0 +1,17 @@
+<svg width="500" height="150" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="snow-blur-rus">
+      <feGaussianBlur stdDeviation="1"/>
+    </filter>
+  </defs>
+  <!-- Snowflakes -->
+  <text x="120" y="50" font-size="20" fill="#fff" opacity="0.4">❄</text>
+  <text x="380" y="50" font-size="20" fill="#fff" opacity="0.4">❄</text>
+  
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Ruslan Display', cursive" font-size="45" fill="#fff" stroke="#8a0000" stroke-width="0.5" letter-spacing="3">
+    ЛЕТНИЙ СНЕГ
+  </text>
+  <text x="50%" y="88%" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="9" fill="#ccc" letter-spacing="3" text-transform="uppercase">
+    ~ ХОЛОДНАЯ ИЛЛЮЗИЯ ~
+  </text>
+</svg>
