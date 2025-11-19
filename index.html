@@ -1170,10 +1170,12 @@
                     cardBack.style.backgroundPosition = 'center';
                     // Add a dark overlay to make text readable
                     cardBack.innerHTML = `
-                    <div class="absolute inset-0 bg-black/50 z-0"></div>
-                    <div class="relative z-10 flex flex-col items-center justify-center h-full">
-                        <div class="text-5xl opacity-90 drop-shadow-lg mb-2">${finalRole.emoji}</div>
-                        <div class="font-ruslan text-xl text-white uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,1)] text-center">${finalRole.text}</div>
+                    <div class="absolute inset-0 bg-black/40 z-0"></div>
+                    <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 w-full">
+                        <div class="text-6xl opacity-100 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] mb-4 transform hover:scale-110 transition-transform duration-300">${finalRole.emoji}</div>
+                        <div class="font-ruslan text-xl md:text-2xl text-white uppercase leading-tight text-center drop-shadow-[0_2px_10px_rgba(212,0,0,0.8)] w-full break-words" style="text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
+                            ${finalRole.text}
+                        </div>
                     </div>
                 `;
                 } else {
@@ -1181,9 +1183,9 @@
                     cardBack.style.backgroundImage = 'none';
                     cardBack.style.background = 'radial-gradient(circle at 35% 35%, #ff4d4d 0%, #cc0000 30%, #800000 70%, #1a0000 100%)';
                     cardBack.innerHTML = `
-                    <div class="tarot-pattern" style="background: transparent; border: none;">
-                         <div class="text-5xl mb-2">${finalRole.emoji}</div>
-                         <div class="font-ruslan text-xl text-white uppercase leading-none text-center">${finalRole.text}</div>
+                    <div class="tarot-pattern" style="background: transparent; border: none; padding: 0 1rem;">
+                         <div class="text-6xl mb-4 drop-shadow-lg">${finalRole.emoji}</div>
+                         <div class="font-ruslan text-xl text-white uppercase leading-tight text-center drop-shadow-md w-full break-words" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${finalRole.text}</div>
                     </div>
                 `;
                 }
