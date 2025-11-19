@@ -709,20 +709,9 @@
         style="left: 50%; animation-duration: 25s; animation-delay: 2s; opacity: 0.5; transform: scale(0.7);"
         onclick="rainEmojis(['🎈'])"></div>
 
-    <!-- 2. FIXED HEADER BAR (Music Control Only) -->
+    <!-- 2. FIXED HEADER BAR (Empty now, just for layout if needed, or remove if empty) -->
+    <!-- Keeping it for potential future use or just removing the button inside -->
     <header class="fixed top-0 left-0 w-full z-40 p-6 flex justify-end items-start pointer-events-none">
-        <!-- Music Toggle -->
-        <button id="music-toggle" onclick="toggleMusic()"
-            class="pointer-events-auto w-10 h-10 bg-black/40 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white transition-all active:scale-90 hover:bg-black/60">
-            <span id="music-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                    <line x1="23" y1="9" x2="17" y2="15"></line>
-                    <line x1="17" y1="9" x2="23" y2="15"></line>
-                </svg>
-            </span>
-        </button>
     </header>
 
     <!-- 3. HERO SECTION -->
@@ -747,6 +736,19 @@
                     2</span>
                 <div class="h-[1px] w-10 bg-white"></div>
             </div>
+
+            <!-- Music Toggle Centered & Circus Styled -->
+            <button id="music-toggle" onclick="toggleMusic()"
+                class="mt-6 w-12 h-12 bg-[#D40000] border-2 border-white rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(212,0,0,0.6)] transition-all active:scale-90 hover:scale-105 hover:bg-[#b30000] z-20">
+                <span id="music-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </span>
+            </button>
         </div>
     </div>
 
