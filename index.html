@@ -709,13 +709,27 @@
         style="left: 50%; animation-duration: 25s; animation-delay: 2s; opacity: 0.5; transform: scale(0.7);"
         onclick="rainEmojis(['🎈'])"></div>
 
-    <!-- 2. HEADER -->
-    <header class="relative z-10 text-center" onclick="rainEmojis(['🎪','🎈','🤡'])">
+    <!-- 2. FIXED HEADER BAR (Music Control Only) -->
+    <header class="fixed top-0 left-0 w-full z-40 p-6 flex justify-end items-start pointer-events-none">
+        <!-- Music Toggle -->
+        <button id="music-toggle" onclick="toggleMusic()"
+            class="pointer-events-auto w-10 h-10 bg-black/40 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white transition-all active:scale-90 hover:bg-black/60">
+            <span id="music-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </span>
+        </button>
+    </header>
+
+    <!-- 3. HERO SECTION -->
+    <div class="relative z-10 text-center" onclick="rainEmojis(['🎪','🎈','🤡'])">
         <!-- Ticker Fixed -->
         <div class="marquee-wrapper">
             <div class="marquee-content">
-                🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • ЦИРКОВЫЕ МЕДВЕДИ •
-                ТАНЦУЮЩИЕ КЛОУНЫ • КРУТЫЕ СИЛАЧИ •
                 🎪 FC/DC 18+ • CIRCUS MAXIMUS • START 23:00 • VNVNC • ЭТИ ВЫХОДНЫЕ • ШОУ НАЧИНАЕТСЯ • ЦИРКОВЫЕ МЕДВЕДИ •
                 ТАНЦУЮЩИЕ КЛОУНЫ • КРУТЫЕ СИЛАЧИ •
             </div>
@@ -734,10 +748,10 @@
                 <div class="h-[1px] w-10 bg-white"></div>
             </div>
         </div>
-    </header>
+    </div>
 
     <!-- MENU IMAGE MODAL -->
-    <div id="menu-image-modal" onclick="closeMenuImage()">
+    <div id="menu-image-modal" onclick="closeMenuImage(); haptic('light')">
         <img id="menu-modal-img" src="" alt="Cocktail">
     </div>
 
@@ -750,7 +764,7 @@
     <div id="special-menu" class="no-scrollbar">
         <div class="menu-frame"></div>
 
-        <button onclick="toggleSpecialMenu()" class="menu-close-btn">
+        <button onclick="toggleSpecialMenu(); haptic('light')" class="menu-close-btn">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -921,27 +935,31 @@
             <div class="glass-panel p-8 space-y-6 relative border-t-4 border-t-white" onclick="rainEmojis(['🦁','🎭'])">
                 <div class="absolute -top-5 -left-2 text-4xl rotate-[-10deg] drop-shadow-md">🎟️</div>
                 <p class="text-center font-medium text-sm leading-relaxed">
-                    🤹‍♀️ Готовьтесь к возвращению волшебства - в VNVNC снова гастролирует аутентичный цирк!
+                    🎪 <strong>CIRCUS MAXIMUS</strong> — это яркий, шумный и величественный викторианский цирк!
                     <br><br>
-                    21 и 22 ноября в нашем шатре музыка, яркие костюмы и тематические декорации сделают тебя частью
-                    грандиозного шоу. Танцпол станет ареной, гости - артистами! 🎩
+                    Шесть харизматичных артистов, надувные медведи и клоуны создают атмосферу управляемого хаоса.
+                    Это не просто вечеринка, это грандиозное театральное зрелище, где МС начинают шоу прямо из
+                    представления! 🎩
                 </p>
                 <div class="space-y-4">
-                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
-                        <span class="text-2xl">🤩</span>
-                        <span class="font-bold text-xs">Бармены-фокусники с коктейлями</span>
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20"
+                        onclick="haptic('light')">
+                        <span class="text-2xl">📸</span>
+                        <span class="font-bold text-xs">Винтажная фотозона с клоунессой</span>
                     </div>
-                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
-                        <span class="text-2xl">🤩</span>
-                        <span class="font-bold text-xs">Диджей-дрессировщик хитов</span>
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20"
+                        onclick="haptic('light')">
+                        <span class="text-2xl">🎲</span>
+                        <span class="font-bold text-xs">Игра в напёрстки с барменом</span>
                     </div>
-                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20">
-                        <span class="text-2xl">🤩</span>
-                        <span class="font-bold text-xs">Цирковые персонажи и безумие</span>
+                    <div class="flex items-center gap-4 p-3 bg-white/10 rounded-xl border border-white/20"
+                        onclick="haptic('light')">
+                        <span class="text-2xl">🐻</span>
+                        <span class="font-bold text-xs">Надувные медведи и живые статуи</span>
                     </div>
                 </div>
                 <div class="text-center text-[10px] uppercase tracking-widest opacity-80 pt-2 font-bold">
-                    Dress Code: красные и белые тона / клоуны / цирк
+                    Dress Code: Красный / Белый / Золотой / Цирк
                 </div>
             </div>
 
@@ -1053,6 +1071,11 @@
         </div>
     </div>
 
+    <!-- 8. AUDIO PLAYER -->
+    <audio id="circus-audio" loop>
+        <source src="circusmusic.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // --- 1. TELEGRAM ---
         const tg = window.Telegram.WebApp;
@@ -1109,15 +1132,36 @@
 
         // --- 4. JOKER GAME (FLIP CARD) ---
         const roles = [
-            { emoji: "🎩", text: "Распорядитель", image: "card_bg_stripes.png" },
+            { emoji: "🎩", text: "Шоумэн", image: "card_bg_stripes.png" },
             { emoji: "🤹", text: "Жонглёр", image: "card_bg_stripes.png" },
             { emoji: "🤸‍♀️", text: "Гимнаст", image: "card_bg_stripes.png" },
             { emoji: "🤡", text: "Клоун-Арлекин", image: "card_bg_stripes.png" },
             { emoji: "🔪", text: "Метатель Ножей", image: "card_bg_stripes.png" },
             { emoji: "🔮", text: "Гадалка", image: "card_bg_stripes.png" },
             { emoji: "🐻", text: "Медведь", image: "card_bg_stripes.png" },
-            { emoji: "🙃", text: "Клоун Вверх Ногами", image: "card_bg_stripes.png" },
-            { emoji: "🗿", text: "Мим", image: "card_bg_stripes.png" }
+            { emoji: "🎈", text: "Пеннивайз", image: "card_bg_stripes.png" },
+            { emoji: "🗿", text: "Мим", image: "card_bg_stripes.png" },
+            { emoji: "🧔‍♀️", text: "Бородатая Женщина", image: "card_bg_stripes.png" },
+            { emoji: "💪", text: "Силач", image: "card_bg_stripes.png" },
+            { emoji: "🐍", text: "Человек-Змея", image: "card_bg_stripes.png" },
+            { emoji: "🔥", text: "Факир", image: "card_bg_stripes.png" },
+            { emoji: "🗡️", text: "Глотатель Шпаг", image: "card_bg_stripes.png" },
+            { emoji: "🐅", text: "Укротитель", image: "card_bg_stripes.png" },
+            { emoji: "🧶", text: "Канатоходец", image: "card_bg_stripes.png" },
+            { emoji: "✨", text: "Фокусник", image: "card_bg_stripes.png" },
+            { emoji: "👯‍♀️", text: "Ассистент", image: "card_bg_stripes.png" },
+            { emoji: "🦁", text: "Лев", image: "card_bg_stripes.png" },
+            { emoji: "🐘", text: "Слон", image: "card_bg_stripes.png" },
+            { emoji: "🐒", text: "Обезьянка", image: "card_bg_stripes.png" },
+            { emoji: "🎟️", text: "Билетер", image: "card_bg_stripes.png" },
+            { emoji: "🍿", text: "Продавец Попкорна", image: "card_bg_stripes.png" },
+            { emoji: "🎪", text: "Воздушный Гимнаст", image: "card_bg_stripes.png" },
+            { emoji: "💣", text: "Человек-Ядро", image: "card_bg_stripes.png" },
+            { emoji: "🐺", text: "Человек-Волк", image: "card_bg_stripes.png" },
+            { emoji: "🐉", text: "Татуированный", image: "card_bg_stripes.png" },
+            { emoji: "🎷", text: "Заклинатель Змей", image: "card_bg_stripes.png" },
+            { emoji: "🗣️", text: "Чревовещатель", image: "card_bg_stripes.png" },
+            { emoji: "😢", text: "Грустный Пьеро", image: "card_bg_stripes.png" }
         ];
         const card = document.getElementById('tarot-card');
         const cardInner = card.querySelector('.tarot-inner');
@@ -1161,23 +1205,41 @@
                 const finalRole = roles[newIndex];
 
                 // FIX: Update the BACK side which is now visible (or will be)
-                // Since we rotate to 180 (or 540, etc), the BACK is the visible face.
-
-                // Set background image if available, else default
                 if (finalRole.image) {
                     cardBack.style.backgroundImage = `url('${finalRole.image}')`;
                     cardBack.style.backgroundSize = 'cover';
                     cardBack.style.backgroundPosition = 'center';
+
+                    // Base font size
+                    let fontSizeClass = 'text-3xl'; // Start big
+
                     // Add a dark overlay to make text readable
                     cardBack.innerHTML = `
                     <div class="absolute inset-0 bg-black/40 z-0"></div>
-                    <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 w-full">
+                    <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 w-full overflow-hidden">
                         <div class="text-6xl opacity-100 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] mb-4 transform hover:scale-110 transition-transform duration-300">${finalRole.emoji}</div>
-                        <div class="font-ruslan text-xl md:text-2xl text-white uppercase leading-tight text-center drop-shadow-[0_2px_10px_rgba(212,0,0,0.8)] w-full break-words" style="text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
-                            ${finalRole.text}
+                        <div id="role-text-container" class="w-full flex justify-center items-center">
+                            <div id="role-text-el" class="font-ruslan ${fontSizeClass} text-white uppercase leading-none text-center drop-shadow-[0_2px_10px_rgba(212,0,0,0.8)] whitespace-nowrap" style="text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
+                                ${finalRole.text}
+                            </div>
                         </div>
                     </div>
                 `;
+
+                    // Auto-scale text to fit
+                    const container = cardBack.querySelector('#role-text-container');
+                    const textEl = cardBack.querySelector('#role-text-el');
+
+                    // Simple scaling logic
+                    const maxW = container.clientWidth;
+                    const textW = textEl.scrollWidth;
+
+                    if (textW > maxW) {
+                        const scale = maxW / textW;
+                        textEl.style.transform = `scale(${scale})`;
+                        textEl.style.transformOrigin = 'center';
+                    }
+
                 } else {
                     // Default red gradient - RESET background image
                     cardBack.style.backgroundImage = 'none';
@@ -1185,7 +1247,7 @@
                     cardBack.innerHTML = `
                     <div class="tarot-pattern" style="background: transparent; border: none; padding: 0 1rem;">
                          <div class="text-6xl mb-4 drop-shadow-lg">${finalRole.emoji}</div>
-                         <div class="font-ruslan text-xl text-white uppercase leading-tight text-center drop-shadow-md w-full break-words" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${finalRole.text}</div>
+                         <div class="font-ruslan text-xl text-white uppercase leading-tight text-center drop-shadow-md w-full whitespace-nowrap" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${finalRole.text}</div>
                     </div>
                 `;
                 }
@@ -1277,6 +1339,38 @@
                 main.style.pointerEvents = 'all';
             }
         }
+
+        // --- 7. AUDIO PLAYER ---
+        const audio = document.getElementById('circus-audio');
+        const musicIcon = document.getElementById('music-icon');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            haptic('light');
+            if (isMusicPlaying) {
+                audio.pause();
+                // MUTE ICON SVG
+                musicIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
+                isMusicPlaying = false;
+            } else {
+                audio.play().catch(e => console.log("Audio play failed", e));
+                // PLAY ICON SVG
+                musicIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
+                isMusicPlaying = true;
+            }
+        }
+
+        // Try to auto-play on first interaction if not playing
+        document.body.addEventListener('click', () => {
+            if (!isMusicPlaying && audio.paused) {
+                // Optional: Auto-play on first click? 
+                // User asked for "play button", so maybe manual is better.
+                // But "eerie circus music" implies background.
+                // Let's stick to manual toggle to be safe, or auto-play if user wants.
+                // For now, manual toggle is safer UX, but I'll enable it if they click the button.
+            }
+        }, { once: true });
+
         updateCountdowns();
     </script>
 
