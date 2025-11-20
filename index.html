@@ -1440,4 +1440,69 @@
         updateCountdowns();
     </script>
 
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=105430267', 'ym');
+
+        ym(105430267, 'init', { ssr: true, webvisor: true, clickmap: true, ecommerce: "dataLayer", accurateTrackBounce: true, trackLinks: true });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/105430267" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+
+    <script type="text/javascript">
+        (function () {
+            // 1. Функция для получения источника из Telegram Web App
+            function getTrafficSource() {
+                var source = null;
+
+                try {
+                    // 1.1. Пробуем достать из query-параметра tgWebAppStartParam
+                    var params = new URLSearchParams(window.location.search);
+                    var fromUrl = params.get('tgWebAppStartParam');
+                    if (fromUrl) {
+                        source = fromUrl;
+                    }
+
+                    // 1.2. Если в URL не нашли — берём из initDataUnsafe.start_param
+                    if (!source && window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe) {
+                        var fromInitData = Telegram.WebApp.initDataUnsafe.start_param;
+                        if (fromInitData) {
+                            source = fromInitData;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error while reading traffic source from Telegram Web App:', e);
+                }
+
+                return source;
+            }
+
+            // 2. Ждём загрузки страницы, чтобы ym уже был доступен
+            window.addEventListener('load', function () {
+                var trafficSource = getTrafficSource();
+
+                if (trafficSource) {
+                    console.log('Telegram Mini App traffic source:', trafficSource);
+                } else {
+                    console.log('Telegram Mini App traffic source not detected');
+                }
+
+                // 3. Отправляем источник в Яндекс.Метрику как параметр визита
+                if (typeof ym === 'function' && trafficSource) {
+                    ym(105430267, 'params', {
+                        telegram_start_source: trafficSource
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+
 </html>
