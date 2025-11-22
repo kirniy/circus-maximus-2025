@@ -936,23 +936,7 @@
         <!-- 4. VIDEO CAROUSEL -->
         <section>
             <div class="flex overflow-x-auto snap-x snap-mandatory px-4 gap-5 no-scrollbar pb-6">
-                <!-- CARD 1 -->
-                <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
-                    onclick="openFullscreenVideo('21-11.mp4', 'https://vnvnc.ru/e/21-11-25-2300', '21.11 | Friday')">
-                    <video src="21-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted
-                        loop playsinline></video>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 w-full p-6 z-10">
-                        <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">21.11</h2>
-                        <p
-                            class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2 mb-1">
-                            Пятница</p>
-                        <div id="countdown-21"
-                            class="text-xs text-white/90 font-mono bg-black/50 inline-block px-2 rounded border border-white/20 mt-1">
-                            Loading...</div>
-                    </div>
-                </div>
-                <!-- CARD 2 -->
+                <!-- CARD 2 (Active - 22.11) -->
                 <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] group cursor-pointer"
                     onclick="openFullscreenVideo('22-11.mp4', 'https://vnvnc.ru/e/22-11-25', '22.11 | Saturday')">
                     <video src="22-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted
@@ -964,6 +948,22 @@
                             class="text-sm text-white font-black uppercase tracking-[0.2em] bg-red-600 inline-block px-2 mb-1">
                             Суббота</p>
                         <div id="countdown-22"
+                            class="text-xs text-white/90 font-mono bg-black/50 inline-block px-2 rounded border border-white/20 mt-1">
+                            Loading...</div>
+                    </div>
+                </div>
+                <!-- CARD 1 (Passed - 21.11) -->
+                <div class="snap-center shrink-0 w-[75vw] aspect-[9/16] relative rounded-2xl overflow-hidden border-2 border-white/50 shadow-none grayscale opacity-60 cursor-default"
+                    onclick="openFullscreenVideo('21-11.mp4', 'https://vnvnc.ru/e/21-11-25-2300', '21.11 | Friday')">
+                    <video src="21-11.mp4" class="absolute inset-0 w-full h-full object-cover opacity-90" autoplay muted
+                        loop playsinline></video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 z-10">
+                        <h2 class="text-5xl font-ruslan text-white mb-1 drop-shadow-lg">21.11</h2>
+                        <p
+                            class="text-sm text-white font-black uppercase tracking-[0.2em] bg-gray-600 inline-block px-2 mb-1">
+                            Пятница</p>
+                        <div id="countdown-21"
                             class="text-xs text-white/90 font-mono bg-black/50 inline-block px-2 rounded border border-white/20 mt-1">
                             Loading...</div>
                     </div>
@@ -1036,13 +1036,13 @@
 
             <!-- Buttons -->
             <div class="space-y-4 pt-4">
-                <a href="https://vnvnc.ru/e/21-11-25-2300" onclick="haptic('light')"
-                    class="ticket-btn block w-full py-5 text-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-xl">
-                    TICKETS 21.11
-                </a>
                 <a href="https://vnvnc.ru/e/22-11-25" onclick="haptic('light')"
                     class="ticket-btn block w-full py-5 text-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-xl">
                     TICKETS 22.11
+                </a>
+                <a href="https://vnvnc.ru/e/21-11-25-2300" onclick="haptic('light')"
+                    class="ticket-btn block w-full py-5 text-center text-xl shadow-none rounded-xl grayscale opacity-50 pointer-events-none">
+                    TICKETS 21.11
                 </a>
                 <div class="text-center text-[10px] uppercase tracking-widest text-white/60 font-bold">
                     Билет или бронь стола — проход без очереди!
